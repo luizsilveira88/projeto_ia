@@ -1,0 +1,71 @@
+CREATE DATABASE IF NOT EXISTS projeto_ia
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_0900_ai_ci;
+
+USE projeto_ia;
+
+
+CREATE TABLE clientes (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(150) NOT NULL,
+    cpf_cnpj VARCHAR(20) NULL,
+    email VARCHAR(254) NULL,
+    telefone VARCHAR(30) NULL,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+
+CREATE TABLE produtos (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(150) NOT NULL,
+    descricao TEXT NULL,
+    preco DECIMAL(12, 2) NOT NULL,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+
+CREATE TABLE pedidos (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    cliente_id BIGINT UNSIGNED NOT NULL,
+    data DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDENTE',
+    valor_total DECIMAL(12, 2) NOT NULL DEFAULT 0.00,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+
+    CONSTRAINT fk_pedidos_cliente
+        FOREIGN KEY (cliente_id)
+        REFERENCES clientes (id)
+) ENGINE=InnoDB;
+
+
+CREATE TABLE pedido_itens (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    pedido_id BIGINT UNSIGNED NOT NULL,
+    produto_id BIGINT UNSIGNED NOT NULL,
+    quantidade DECIMAL(12, 3) NOT NULL,
+    valor_unitario DECIMAL(12, 2) NOT NULL,
+    valor_total DECIMAL(12, 2) NOT NULL,
+
+    PRIMARY KEY (id),
+
+    CONSTRAINT fk_pedido_itens_pedido
+        FOREIGN KEY (pedido_id)
+        REFERENCES pedidos (id),
+
+    CONSTRAINT fk_pedido_itens_produto
+        FOREIGN KEY (produto_id)
+        REFERENCES produtos (id)
+) ENGINE=InnoDB;
