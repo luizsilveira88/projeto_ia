@@ -26,7 +26,7 @@
                 <!-- User Info -->
                 <div class="user-badge">
                     <i class="fas fa-user-circle"></i>
-                    <span>João Silva</span>
+                    <span>Luiz Silveira</span>
                 </div>
             </div>
         </div>
